@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CoffeeShop.PointOfSale.EntityFramework.New": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\projects\\Programming\\C#\\CoffeeShop.PointOfSale.EntityFramework.New\\CoffeeShop.PointOfSale.EntityFramework.New\\"
+    }
+  }
+}
