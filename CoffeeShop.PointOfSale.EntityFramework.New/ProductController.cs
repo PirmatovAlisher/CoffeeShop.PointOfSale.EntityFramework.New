@@ -1,12 +1,14 @@
-﻿namespace CoffeeShop.PointOfSale.EntityFramework.New;
+﻿using CoffeeShop.PointOfSale.EntityFramework.New.Models;
+
+namespace CoffeeShop.PointOfSale.EntityFramework.New;
 
 internal class ProductController
 {
-	internal static void AddProduct(string name)
+	internal static void AddProduct(Product product)
 	{
 		using var db = new ProductsContext();
 
-		db.Add(new Product { ProductName = name });
+		db.Add(product);
 		db.SaveChanges();
 
 	}
@@ -35,12 +37,15 @@ internal class ProductController
 		return products;
 	}
 
-	internal static void Quit()
+	internal static void UpdateProduct(Product product)
 	{
-		throw new NotImplementedException();
+		using var db = new ProductsContext();
+
+		db.Update(product);
+		db.SaveChanges();
 	}
 
-	internal static void UpdateProduct()
+	internal static void Quit()
 	{
 		throw new NotImplementedException();
 	}
