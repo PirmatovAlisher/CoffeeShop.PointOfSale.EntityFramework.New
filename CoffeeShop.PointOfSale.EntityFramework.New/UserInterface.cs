@@ -39,8 +39,6 @@ internal class UserInterface
 		}
 	}
 
-
-
 	private static void CategoriesMenu()
 	{
 		var isCategoriesMenuRunning = true;
