@@ -36,18 +36,37 @@ internal class CategoryService
 		Console.Clear();
 	}
 
-	internal static int GetCategoryOptionInput()
+	internal static Category GetCategoryOptionInput()
 	{
 		var categories = CategoryController.GetCategories();
 
 		var categoriesArray = categories.Select(x => x.CategoryName).ToArray();
 
 		var option = AnsiConsole.Prompt(new SelectionPrompt<string>()
-							    .Title("Choose Category")
+								.Title("Choose Category")
 								.AddChoices(categoriesArray));
 
-		var id = categories.Single(x => x.CategoryName == option).CategoryId;
+		var category = categories.Single(x => x.CategoryName == option);
 
-		return id;
+		return category;
+	}
+
+	internal static void DeleteCategoty()
+	{
+		var category = GetCategoryOptionInput();
+
+		CategoryController.DeleteCategory(category);
+
+	}
+
+	internal static void UpdateCategory()
+	{
+		var category = GetCategoryOptionInput();
+
+		category.CategoryName = AnsiConsole.Confirm("Update CategoryName?")
+							  ? AnsiConsole.Ask<string>("Category's new Name:")
+							  : category.CategoryName;
+
+		CategoryController.UpdateCategory(category);
 	}
 }

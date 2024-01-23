@@ -21,6 +21,8 @@ internal class UserInterface
 								 .AddChoices(
 									 MenuOptions.AddCategory,
 									 MenuOptions.ViewAllCategories,
+									 MenuOptions.UpdateCategory,
+									 MenuOptions.DeleteCategory,
 									 MenuOptions.AddProduct,
 									 MenuOptions.DeleteProduct,
 									 MenuOptions.UpdateProduct,
@@ -36,6 +38,12 @@ internal class UserInterface
 					break;
 				case MenuOptions.ViewAllCategories:
 					CategoryService.GetCategories();
+					break;
+				case MenuOptions.UpdateCategory:
+					CategoryService.UpdateCategory();
+					break;
+				case MenuOptions.DeleteCategory:
+					CategoryService.DeleteCategoty();
 					break;
 				case MenuOptions.AddProduct:
 					ProductService.InsertProduct();

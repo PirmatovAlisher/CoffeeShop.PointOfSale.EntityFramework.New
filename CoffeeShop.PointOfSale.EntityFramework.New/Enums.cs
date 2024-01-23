@@ -6,6 +6,8 @@ internal class Enums
 	{
 		AddCategory,
 		ViewAllCategories,
+		UpdateCategory,
+		DeleteCategory,
 		AddProduct,
 		DeleteProduct,
 		UpdateProduct,
