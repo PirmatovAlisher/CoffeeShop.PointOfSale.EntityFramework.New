@@ -17,6 +17,13 @@ internal class CategoryService
 
 	}
 
+	internal static void GetCategory()
+	{
+		var category = GetCategoryOptionInput();
+
+		UserInterface.ShowCategory(category);
+	}
+
 	internal static void GetCategories()
 	{
 		var table = new Table();

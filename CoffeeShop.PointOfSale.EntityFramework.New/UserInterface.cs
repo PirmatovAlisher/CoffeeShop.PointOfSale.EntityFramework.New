@@ -15,55 +15,113 @@ internal class UserInterface
 		while (appActive)
 		{
 			Console.Clear();
-			var option = AnsiConsole.Prompt(
-								 new SelectionPrompt<MenuOptions>()
-								 .Title("What would you like to do?")
-								 .AddChoices(
-									 MenuOptions.AddCategory,
-									 MenuOptions.ViewAllCategories,
-									 MenuOptions.UpdateCategory,
-									 MenuOptions.DeleteCategory,
-									 MenuOptions.AddProduct,
-									 MenuOptions.DeleteProduct,
-									 MenuOptions.UpdateProduct,
-									 MenuOptions.ViewProduct,
-									 MenuOptions.ViewAllProducts,
-									 MenuOptions.Quit
-									 ));
+			var option = AnsiConsole.Prompt(new SelectionPrompt<MainMenuOptions>()
+									.Title("What would you like to do?")
+									.AddChoices(
+										 MainMenuOptions.ManageCategories,
+										 MainMenuOptions.ManageProducts,
+										 MainMenuOptions.Quit
+										 ));
 
 			switch (option)
 			{
-				case MenuOptions.AddCategory:
+				case MainMenuOptions.ManageCategories:
+					CategoriesMenu();
+					break;
+				case MainMenuOptions.ManageProducts:
+					ProductsMenu();
+					break;
+				case MainMenuOptions.Quit:
+					Console.WriteLine("Goodbye");
+					appActive = false;
+					break;
+			}
+		}
+	}
+
+
+
+	private static void CategoriesMenu()
+	{
+		var isCategoriesMenuRunning = true;
+
+		while (isCategoriesMenuRunning)
+		{
+			Console.Clear();
+			var option = AnsiConsole.Prompt(new SelectionPrompt<CategoryMenu>()
+									.Title("Categories Menu")
+									.AddChoices(
+									CategoryMenu.AddCategory,
+									CategoryMenu.DeleteCategory,
+									CategoryMenu.UpdateCategory,
+									CategoryMenu.ViewCategory,
+									CategoryMenu.ViewAllCategories,
+									CategoryMenu.GoBack
+									));
+
+			switch (option)
+			{
+				case CategoryMenu.AddCategory:
 					CategoryService.InsertCategory();
 					break;
-				case MenuOptions.ViewAllCategories:
-					CategoryService.GetCategories();
-					break;
-				case MenuOptions.UpdateCategory:
-					CategoryService.UpdateCategory();
-					break;
-				case MenuOptions.DeleteCategory:
+				case CategoryMenu.DeleteCategory:
 					CategoryService.DeleteCategoty();
 					break;
-				case MenuOptions.AddProduct:
+				case CategoryMenu.UpdateCategory:
+					CategoryService.UpdateCategory();
+					break;
+				case CategoryMenu.ViewCategory:
+					CategoryService.GetCategory();
+					break;
+				case CategoryMenu.ViewAllCategories:
+					CategoryService.GetCategories();
+					break;
+				case CategoryMenu.GoBack:
+					isCategoriesMenuRunning = false;
+					break;
+			}
+
+		}
+	}
+
+	private static void ProductsMenu()
+	{
+		Console.Clear();
+		var isProductsMenuRunning = true;
+
+		while (isProductsMenuRunning)
+		{
+			var option = AnsiConsole.Prompt(new SelectionPrompt<ProductMenu>()
+									.Title("Products Menu")
+									.AddChoices(
+									ProductMenu.AddProduct,
+									ProductMenu.DeleteProduct,
+									ProductMenu.UpdateProduct,
+									ProductMenu.ViewProduct,
+									ProductMenu.ViewAllProducts,
+									ProductMenu.GoBack
+									));
+
+			switch (option)
+			{
+				case ProductMenu.AddProduct:
 					ProductService.InsertProduct();
 					break;
-				case MenuOptions.DeleteProduct:
+				case ProductMenu.DeleteProduct:
 					ProductService.DeleteProduct();
 					break;
-				case MenuOptions.UpdateProduct:
+				case ProductMenu.UpdateProduct:
 					ProductService.UpdateProduct();
 					break;
-				case MenuOptions.ViewProduct:
+				case ProductMenu.ViewProduct:
 					ProductService.GetProduct();
 					break;
-				case MenuOptions.ViewAllProducts:
+				case ProductMenu.ViewAllProducts:
 					ProductService.GetProducts();
 					break;
-				case MenuOptions.Quit:
-					ProductController.Quit();
+				case ProductMenu.GoBack:
+					isProductsMenuRunning = false;
 					break;
-
 			}
 		}
 	}
@@ -104,4 +162,19 @@ Category: {product.Category.CategoryName}");
 		Console.Clear();
 	}
 
+	internal static void ShowCategory(Category category)
+	{
+		var panel = new Panel($@"Id: {category.CategoryId}
+Name: {category.CategoryName}
+Product Count: {category.Products.Count}");
+
+		panel.Header = new PanelHeader($"{category.CategoryName}");
+		panel.Padding = new Padding(2, 2, 2, 2);
+
+		AnsiConsole.Write(panel);
+		ShowProductTable(category.Products);
+		Console.WriteLine("Enter any key to continue");
+		Console.ReadLine();
+		Console.Clear();
+	}
 }
