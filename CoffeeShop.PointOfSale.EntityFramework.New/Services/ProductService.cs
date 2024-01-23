@@ -18,7 +18,7 @@ internal class ProductService
 		ProductController.AddProduct(product);
 	}
 
-	static private Product GetProductOptionInput()
+	internal static Product GetProductOptionInput()
 	{
 		var products = ProductController.GetProducts();
 

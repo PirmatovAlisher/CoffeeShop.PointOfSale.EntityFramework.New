@@ -2,25 +2,11 @@
 
 internal class Enums
 {
-	internal enum MenuOptions
-	{
-		AddCategory,
-		ViewCategory,
-		ViewAllCategories,
-		UpdateCategory,
-		DeleteCategory,
-		AddProduct,
-		DeleteProduct,
-		UpdateProduct,
-		ViewProduct,
-		ViewAllProducts,
-		Quit
-	}
-
 	internal enum MainMenuOptions
 	{
 		ManageCategories,
 		ManageProducts,
+		ManageOrders,
 		Quit
 	}
 
@@ -41,6 +27,12 @@ internal class Enums
 		UpdateProduct,
 		ViewProduct,
 		ViewAllProducts,
+		GoBack
+	}
+
+	internal enum OrderMenu
+	{
+		AddOrder,
 		GoBack
 	}
 }

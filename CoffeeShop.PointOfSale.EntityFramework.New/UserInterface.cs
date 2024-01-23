@@ -1,5 +1,4 @@
-﻿using CoffeeShop.PointOfSale.EntityFramework.New.Controllers;
-using CoffeeShop.PointOfSale.EntityFramework.New.Models;
+﻿using CoffeeShop.PointOfSale.EntityFramework.New.Models;
 using CoffeeShop.PointOfSale.EntityFramework.New.Services;
 using Spectre.Console;
 using static CoffeeShop.PointOfSale.EntityFramework.New.Enums;
@@ -20,6 +19,7 @@ internal class UserInterface
 									.AddChoices(
 										 MainMenuOptions.ManageCategories,
 										 MainMenuOptions.ManageProducts,
+										 MainMenuOptions.ManageOrders,
 										 MainMenuOptions.Quit
 										 ));
 
@@ -31,11 +31,41 @@ internal class UserInterface
 				case MainMenuOptions.ManageProducts:
 					ProductsMenu();
 					break;
+				case MainMenuOptions.ManageOrders:
+					OrdersMenu();
+					break;
 				case MainMenuOptions.Quit:
 					Console.WriteLine("Goodbye");
 					appActive = false;
 					break;
 			}
+		}
+	}
+
+	private static void OrdersMenu()
+	{
+		var isOrdersMenuRunning = true;
+
+		while (isOrdersMenuRunning)
+		{
+			Console.Clear();
+			var option = AnsiConsole.Prompt(new SelectionPrompt<OrderMenu>()
+									.Title("Orders Menu")
+									.AddChoices(
+									OrderMenu.AddOrder,
+									OrderMenu.GoBack
+									));
+
+			switch (option)
+			{
+				case OrderMenu.AddOrder:
+					OrderService.InsertOrder();
+					break;
+				case OrderMenu.GoBack:
+					isOrdersMenuRunning = false;
+					break;
+			}
+
 		}
 	}
 
