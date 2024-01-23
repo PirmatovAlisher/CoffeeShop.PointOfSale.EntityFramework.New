@@ -14,6 +14,7 @@ internal class UserInterface
 
 		while (appActive)
 		{
+			Console.Clear();
 			var option = AnsiConsole.Prompt(
 								 new SelectionPrompt<MenuOptions>()
 								 .Title("What would you like to do?")
@@ -65,10 +66,11 @@ internal class UserInterface
 		table.AddColumn("Id");
 		table.AddColumn("Name");
 		table.AddColumn("Price");
+		table.AddColumn("Category");
 
 		foreach (var product in products)
 		{
-			table.AddRow(product.ProductId.ToString(), product.ProductName, product.ProductPrice.ToString());
+			table.AddRow(product.ProductId.ToString(), product.ProductName, product.ProductPrice.ToString(), product.Category.CategoryName);
 		}
 
 		AnsiConsole.Write(table);
@@ -82,7 +84,8 @@ internal class UserInterface
 	{
 		var panel = new Panel($@"Id: {product.ProductId}
 Name: {product.ProductName}
-Price: {product.ProductPrice}");
+Price: {product.ProductPrice}
+Category: {product.Category.CategoryName}");
 
 		panel.Header = new PanelHeader("Product Info");
 		panel.Padding = new Padding(2, 2, 2, 2);
