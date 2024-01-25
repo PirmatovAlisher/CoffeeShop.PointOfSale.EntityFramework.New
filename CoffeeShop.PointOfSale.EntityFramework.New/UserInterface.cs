@@ -14,13 +14,14 @@ internal class UserInterface
 
 		while (appActive)
 		{
-			Console.Clear();
+			//Console.Clear();
 			var option = AnsiConsole.Prompt(new SelectionPrompt<MainMenuOptions>()
 									.Title("What would you like to do?")
 									.AddChoices(
 										 MainMenuOptions.ManageCategories,
 										 MainMenuOptions.ManageProducts,
 										 MainMenuOptions.ManageOrders,
+										 MainMenuOptions.GenerateReport,
 										 MainMenuOptions.Quit
 										 ));
 
@@ -34,6 +35,9 @@ internal class UserInterface
 					break;
 				case MainMenuOptions.ManageOrders:
 					OrdersMenu();
+					break;
+				case MainMenuOptions.GenerateReport:
+					ReportService.MonthlyReport();
 					break;
 				case MainMenuOptions.Quit:
 					Console.WriteLine("Goodbye");
@@ -49,7 +53,7 @@ internal class UserInterface
 
 		while (isOrdersMenuRunning)
 		{
-			Console.Clear();
+			//Console.Clear();
 			var option = AnsiConsole.Prompt(new SelectionPrompt<OrderMenu>()
 									.Title("Orders Menu")
 									.AddChoices(
@@ -84,7 +88,7 @@ internal class UserInterface
 
 		while (isCategoriesMenuRunning)
 		{
-			Console.Clear();
+			//Console.Clear();
 			var option = AnsiConsole.Prompt(new SelectionPrompt<CategoryMenu>()
 									.Title("Categories Menu")
 									.AddChoices(
@@ -123,7 +127,7 @@ internal class UserInterface
 
 	private static void ProductsMenu()
 	{
-		Console.Clear();
+		//Console.Clear();
 		var isProductsMenuRunning = true;
 
 		while (isProductsMenuRunning)
@@ -284,5 +288,24 @@ Product Count: {order.OrderProducts.Sum(x => x.Quantity)}");
 		Console.WriteLine("Enter any key to continue");
 		Console.ReadLine();
 		Console.Clear();
+	}
+
+	internal static void ShowReportByMonth(List<MonthlyReportDTO> report)
+	{
+		var table = new Table();
+
+		table.AddColumn("Month");
+		table.AddColumn("Total Quantity");
+		table.AddColumn("Total Price");
+
+		foreach (MonthlyReportDTO reportItem in report)
+		{
+			table.AddRow(
+						reportItem.Month,
+						reportItem.TotalQuantity.ToString(),
+						reportItem.TotalPrice.ToString()
+						);
+		}
+		AnsiConsole.Write(table);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using CoffeeShop.PointOfSale.EntityFramework.New.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace CoffeeShop.PointOfSale.EntityFramework.New
 {
@@ -13,8 +14,23 @@ namespace CoffeeShop.PointOfSale.EntityFramework.New
 
 		public DbSet<OrderProduct> OrderProducts { get; set; }
 
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-								optionsBuilder.UseSqlite($"Data Source = product.db");
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder
+							    .UseSqlite($"Data Source = product.db")
+								.EnableSensitiveDataLogging()
+								.UseLoggerFactory(GetLoggerFactory());
+
+		private ILoggerFactory? GetLoggerFactory()
+		{
+			var loggerFactory = LoggerFactory.Create(builder =>
+			{
+				builder.AddConsole();
+				builder.AddFilter((category, level) =>
+				category == DbLoggerCategory.Database.Command.Name &&
+				level == LogLevel.Information);
+			});
+
+			return loggerFactory;
+		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -37,52 +53,508 @@ namespace CoffeeShop.PointOfSale.EntityFramework.New
 						.HasForeignKey(p => p.CategoryId);
 
 			modelBuilder.Entity<Category>()
-						.HasData(new List<Category>
-						{
-
-							new() {
-							CategoryId = 1,
-							CategoryName = "Coffee"
-							},
-
-							new()
-							{
-								CategoryId = 2,
-								CategoryName = "Juice"
-							}
-						});
+		   .HasData(new List<Category>
+		   {
+				new Category
+				{
+					CategoryId = 1,
+					CategoryName = "Coffee"
+				},
+				new Category
+				{
+					CategoryId = 2,
+					CategoryName = "Juice"
+				},
+				new Category
+				{
+					CategoryId = 3,
+					CategoryName = "Pastry"
+				},
+				new Category
+				{
+					CategoryId = 4,
+					CategoryName = "Loot"
+				}
+		   });
 
 			modelBuilder.Entity<Product>()
-						.HasData(new List<Product>
-						{
-							new() {
-								ProductId = 1,
-								CategoryId = 1,
-								ProductName = "Late",
-								ProductPrice = 5.99m
-							},
-							
-							new() {
-								ProductId = 2,
-								CategoryId = 1,
-								ProductName = "Espresso",
-								ProductPrice = 3.99m
-							},
-							
-							new() {
-								ProductId = 3,
-								CategoryId = 2,
-								ProductName = "Apple Juice",
-								ProductPrice = 1.99m
-							},
-							
-							new() {
-								ProductId = 4,
-								CategoryId = 2,
-								ProductName = "Orange Juice",
-								ProductPrice = 8.99m
-							}
-						});
+			   .HasData(new List<Product>
+			   {
+				new Product
+				{
+					ProductId = 1,
+					CategoryId = 1,
+					ProductName = "Cappuccino",
+					ProductPrice = 13.0m
+				},
+				new Product
+				{
+					ProductId = 2,
+					CategoryId = 1,
+					ProductName = "Latte",
+					ProductPrice = 5.0m
+				},
+				new Product
+				{
+					ProductId = 3,
+					CategoryId = 2,
+					ProductName = "Apple Juice",
+					ProductPrice = 13.0m
+				},
+				new Product
+				{
+					ProductId = 4,
+					CategoryId = 2,
+					ProductName = "Orange Juice",
+					ProductPrice = 6.0m
+				},
+				new Product
+				{
+					ProductId = 5,
+					CategoryId = 3,
+					ProductName = "Cheesecake",
+					ProductPrice = 7.0m
+				},
+				new Product
+				{
+					ProductId = 6,
+					CategoryId = 3,
+					ProductName = "Beefcake",
+					ProductPrice = 9.0m
+				},
+				new Product
+				{
+					ProductId = 7,
+					CategoryId = 4,
+					ProductName = "Super Mug",
+					ProductPrice = 13.0m
+				},
+				new Product
+				{
+					ProductId = 8,
+					CategoryId = 4,
+					ProductName = "Super Keep Cup",
+					ProductPrice = 6.0m
+				}
+			   });
+
+			modelBuilder.Entity<Order>()
+			  .HasData(new List<Order>
+			  {
+				new Order
+				{
+					OrderId = 1,
+					CreatedDate = DateTime.Now.AddMonths(-1),
+					TotalPrice = 70
+				},
+				new Order
+				{
+					OrderId = 2,
+					CreatedDate = DateTime.Now.AddMonths(-1),
+					TotalPrice = 109
+				},
+				new Order
+				{
+					OrderId = 3,
+					CreatedDate = DateTime.Now.AddMonths(-1),
+					TotalPrice = 189
+				},
+				new Order
+				{
+					OrderId = 4,
+					CreatedDate = DateTime.Now.AddMonths(-1),
+					TotalPrice = 23
+				},
+				new Order
+				{
+					OrderId = 5,
+					CreatedDate = DateTime.Now.AddMonths(-2),
+					TotalPrice = 27
+				},
+				new Order
+				{
+					OrderId = 6,
+					CreatedDate = DateTime.Now.AddMonths(-2),
+					TotalPrice = 65
+				},
+				new Order
+				{
+					OrderId = 7,
+					CreatedDate = DateTime.Now.AddMonths(-2),
+					TotalPrice = 5
+				},
+				new Order
+				{
+					OrderId = 8,
+					CreatedDate = DateTime.Now.AddMonths(-2),
+					TotalPrice = 91
+				},
+				new Order
+				{
+					OrderId = 9,
+					CreatedDate = DateTime.Now.AddMonths(-2),
+					TotalPrice = 88
+				},
+				new Order
+				{
+					OrderId = 10,
+					CreatedDate = DateTime.Now.AddMonths(-3),
+					TotalPrice = 91
+				},
+				new Order
+				{
+					OrderId = 11,
+					CreatedDate = DateTime.Now.AddMonths(-3),
+					TotalPrice = 18
+				},
+				new Order
+				{
+					OrderId = 12,
+					CreatedDate = DateTime.Now.AddMonths(-3),
+					TotalPrice = 23
+				},
+				new Order
+				{
+					OrderId = 13,
+					CreatedDate = DateTime.Now.AddMonths(-3),
+					TotalPrice = 27
+				},
+				new Order
+				{
+					OrderId = 14,
+					CreatedDate = DateTime.Now.AddMonths(-3),
+					TotalPrice = 179
+				},
+				new Order
+				{
+					OrderId = 15,
+					CreatedDate = DateTime.Now.AddMonths(-3),
+					TotalPrice = 202
+				},
+				new Order
+				{
+					OrderId = 16,
+					CreatedDate = DateTime.Now.AddMonths(-3),
+					TotalPrice = 97
+				},
+				new Order
+				{
+					OrderId = 17,
+					CreatedDate = DateTime.Now.AddYears(1),
+					TotalPrice = 70
+				},
+				new Order
+				{
+					OrderId = 18,
+					CreatedDate = DateTime.Now.AddYears(1),
+					TotalPrice = 109
+				},
+				new Order
+				{
+					OrderId = 19,
+					CreatedDate = DateTime.Now.AddYears(1),
+					TotalPrice = 189
+				},
+				new Order
+				{
+					OrderId = 20,
+					CreatedDate = DateTime.Now.AddYears(-1),
+					TotalPrice = 23
+				},
+			  });
+
+			modelBuilder.Entity<OrderProduct>()
+			  .HasData(new List<OrderProduct>
+			  {
+				new OrderProduct
+				{
+					OrderProductId = 1,
+					ProductId = 1,
+					Quantity = 5
+				},
+				new OrderProduct
+				{
+					OrderProductId = 1,
+					ProductId = 2,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 2,
+					ProductId = 3,
+					Quantity = 7
+				},
+				new OrderProduct
+				{
+					OrderProductId = 2,
+					ProductId = 4,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 3,
+					ProductId = 1,
+					Quantity = 5
+				},
+				new OrderProduct
+				{
+					OrderProductId = 3,
+					ProductId = 2,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 3,
+					ProductId = 3,
+					Quantity = 7
+				},
+				new OrderProduct
+				{
+					OrderProductId = 3,
+					ProductId = 4,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 4,
+					ProductId = 5,
+					Quantity = 2
+				},
+				new OrderProduct
+				{
+					OrderProductId = 4,
+					ProductId = 6,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 5,
+					ProductId = 6,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 5,
+					ProductId = 8,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 6,
+					ProductId = 1,
+					Quantity = 5
+				},
+				new OrderProduct
+				{
+					OrderProductId = 7,
+					ProductId = 2,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 8,
+					ProductId = 3,
+					Quantity = 7
+				},
+				new OrderProduct
+				{
+					OrderProductId = 9,
+					ProductId = 4,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 9,
+					ProductId = 1,
+					Quantity = 5
+				},
+				new OrderProduct
+				{
+					OrderProductId = 9,
+					ProductId = 2,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 10,
+					ProductId = 3,
+					Quantity = 7
+				},
+				new OrderProduct
+				{
+					OrderProductId = 11,
+					ProductId = 4,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 12,
+					ProductId = 5,
+					Quantity = 2
+				},
+				new OrderProduct
+				{
+					OrderProductId = 12,
+					ProductId = 6,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 13,
+					ProductId = 6,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 13,
+					ProductId = 8,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 14,
+					ProductId = 1,
+					Quantity = 5
+				},
+				new OrderProduct
+				{
+					OrderProductId = 14,
+					ProductId = 2,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 14,
+					ProductId = 3,
+					Quantity = 7
+				},
+				new OrderProduct
+				{
+					OrderProductId = 14,
+					ProductId = 4,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 15,
+					ProductId = 1,
+					Quantity = 5
+				},
+				new OrderProduct
+				{
+					OrderProductId = 15,
+					ProductId = 2,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 15,
+					ProductId = 3,
+					Quantity = 7
+				},
+				new OrderProduct
+				{
+					OrderProductId = 15,
+					ProductId = 4,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 15,
+					ProductId = 5,
+					Quantity = 2
+				},
+				new OrderProduct
+				{
+					OrderProductId = 15,
+					ProductId = 6,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 16,
+					ProductId = 6,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 16,
+					ProductId = 8,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 16,
+					ProductId = 1,
+					Quantity = 5
+				},
+				new OrderProduct
+				{
+					OrderProductId = 16,
+					ProductId = 2,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 17,
+					ProductId = 1,
+					Quantity = 5
+				},
+				new OrderProduct
+				{
+					OrderProductId = 17,
+					ProductId = 2,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 18,
+					ProductId = 3,
+					Quantity = 7
+				},
+				new OrderProduct
+				{
+					OrderProductId = 18,
+					ProductId = 4,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 19,
+					ProductId = 1,
+					Quantity = 5
+				},
+				new OrderProduct
+				{
+					OrderProductId = 19,
+					ProductId = 2,
+					Quantity = 1
+				},
+				new OrderProduct
+				{
+					OrderProductId = 19,
+					ProductId = 3,
+					Quantity = 7
+				},
+				new OrderProduct
+				{
+					OrderProductId = 19,
+					ProductId = 4,
+					Quantity = 3
+				},
+				new OrderProduct
+				{
+					OrderProductId = 20,
+					ProductId = 5,
+					Quantity = 2
+				},
+				new OrderProduct
+				{
+					OrderProductId = 20,
+					ProductId = 6,
+					Quantity = 1
+				},
+			  });
 		}
 	}
 }
